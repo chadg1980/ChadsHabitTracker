@@ -30,10 +30,10 @@ public class HabitDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase database) {
         String SQL_CREATE_HABITTRACKER_TABLE =
                 "CREATE TABLE " + HabitEntry.TABLE_NAME + " (" +
-                 HabitEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
-                 HabitEntry.COLUMN_HABIT_NAME + " TEXT NOT NULL," +
-                 HabitEntry.COLUMN_HABIT_DAY_TIME + " INTEGER NOT NULL," +
-                 HabitEntry.COLUMN_HABIT_TYPE  + "  INTEGER NOT NULL );";
+                        HabitEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                        HabitEntry.COLUMN_HABIT_NAME + " TEXT NOT NULL," +
+                        HabitEntry.COLUMN_HABIT_DAY_TIME + " INTEGER NOT NULL," +
+                        HabitEntry.COLUMN_HABIT_TYPE  + "  INTEGER NOT NULL );";
         //Execute the SQL command
         database.execSQL(SQL_CREATE_HABITTRACKER_TABLE);
 
@@ -42,5 +42,10 @@ public class HabitDbHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         //The database is at V1.
+    }
+    public static SQLiteDatabase getReadableDatabase(Context context){
+        HabitDbHelper myDbHelper = new HabitDbHelper(context);
+        SQLiteDatabase db = myDbHelper.getReadableDatabase();
+        return db;
     }
 }

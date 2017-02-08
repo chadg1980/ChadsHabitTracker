@@ -7,14 +7,13 @@ import android.provider.BaseColumns;
  */
 
 public class HabitContract {
+    //Empty constructor so the class is not accidentally initialized
     private HabitContract(){}
 
     public static final class HabitEntry implements BaseColumns{
         //Name of the table
         public static final String TABLE_NAME = "habit";
         //Name of the columns
-        //
-        public final static String _ID = BaseColumns._ID;
         public final static String COLUMN_HABIT_NAME = "name";
         public final static String COLUMN_HABIT_DAY_TIME = "dayTime";
         public final static String COLUMN_HABIT_TYPE = "type";

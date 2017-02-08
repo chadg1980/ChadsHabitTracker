@@ -11,8 +11,6 @@ import android.widget.TextView;
 
 import com.h.chad.chadshabittracker.HabitContract.HabitEntry;
 
-import org.w3c.dom.Text;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,17 +24,15 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //No UI for this project.
+        //But I have some text to check my work
         setContentView(R.layout.activity_main);
         mDbHelper = new HabitDbHelper(this);
         intsertHabit();
-        cursorData();
-
+        Cursor myCursor = cursorData();
     }
-
     private void intsertHabit() {
         //Get the database in write mode
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
-
         ContentValues v1 = valuesToInsert0();
         long columnID = db.insert(HabitEntry.TABLE_NAME, null, v1);
         if(columnID == -1){
@@ -61,11 +57,14 @@ public class MainActivity extends AppCompatActivity {
 
     private ContentValues valuesToInsert1(){
         //Create values
+        //Date February 1, 2017
         String date = "2-1-2017";
+        //8 AM
         String time = "8:00";
+        //Combine date and time to parse
         String dateTime = date + " " + time;
+        //switch the date and time to mills for db storage in int
         long mills = dateTimeToMilli(dateTime);
-        Log.i(LOG_TAG, "time in mills "+ date + ": " + time  +Long.toString(mills));
         ContentValues values = new ContentValues();
         values.put(HabitEntry.COLUMN_HABIT_NAME, "smoked a cigarette");
         values.put(HabitEntry.COLUMN_HABIT_DAY_TIME, mills );
@@ -83,14 +82,11 @@ public class MainActivity extends AppCompatActivity {
             Log.i(LOG_TAG, "parse failed", e);
         }
         return dateMills;
-
-
     }
-    private void cursorData() {
+    private Cursor cursorData() {
         //access the database
-        mDbHelper = new HabitDbHelper(this);
         //create a sqlite instance
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        SQLiteDatabase db = HabitDbHelper.getReadableDatabase(this);
 
         String [] projection = {
                 HabitEntry._ID,
@@ -109,10 +105,10 @@ public class MainActivity extends AppCompatActivity {
         TextView countTextView = (TextView)findViewById(R.id.showCount);
         countTextView.setText("There are :" + Integer.toString(cursor.getCount()) + " tables\n");
         countTextView.append("\n" +
-        HabitEntry._ID + " - " +
-        HabitEntry.COLUMN_HABIT_NAME + " - " +
-        HabitEntry.COLUMN_HABIT_DAY_TIME + " - " +
-        HabitEntry.COLUMN_HABIT_TYPE + " - "
+                HabitEntry._ID + " - " +
+                HabitEntry.COLUMN_HABIT_NAME + " - " +
+                HabitEntry.COLUMN_HABIT_DAY_TIME + " - " +
+                HabitEntry.COLUMN_HABIT_TYPE + " - "
         );
 
         int idColumn = cursor.getColumnIndex(HabitEntry._ID);
@@ -135,6 +131,7 @@ public class MainActivity extends AppCompatActivity {
                     currentDate + " - " +
                     habitType);
         }
+        return cursor;
     }
 
     private String getHabitType(int typeColumn) {
